@@ -1281,32 +1281,41 @@
   }
 
   /* ── AGENT SECTION ──────────────────────────────────────────────────────── */
-  .agent-quick-actions {
+  .agent-caps {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
     margin-bottom: 20px;
   }
-  .agent-quick-btn {
+  .agent-cap-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
-    padding: 7px 14px;
-    border-radius: var(--radius-sm);
-    border: 1.5px solid var(--gold);
-    background: rgba(200,168,75,0.1);
-    color: var(--gold);
+    padding: 9px 16px;
+    border-radius: 24px;
+    border: 1.5px solid var(--mist);
+    background: var(--white);
+    color: var(--text-mid);
     cursor: pointer;
     transition: all var(--transition);
     white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(10,31,68,0.06);
   }
-  .agent-quick-btn:hover { background: rgba(200,168,75,0.22); }
-  .agent-quick-btn--secondary {
-    border-color: var(--slate);
-    background: transparent;
-    color: var(--text-mid);
+  .agent-cap-chip:hover {
+    border-color: var(--gold);
+    color: var(--gold-dim);
+    background: rgba(200,168,75,0.06);
+    box-shadow: 0 2px 8px rgba(200,168,75,0.12);
   }
-  .agent-quick-btn--secondary:hover { background: var(--cream); border-color: var(--navy-light); }
+  .agent-cap-icon {
+    display: flex;
+    align-items: center;
+    opacity: 0.6;
+  }
+  .agent-cap-chip:hover .agent-cap-icon { opacity: 1; }
 
   .agent-layout {
     display: grid;
@@ -1558,6 +1567,13 @@
     <div class="step-btn" id="step-agent">
       <div class="step-num">7</div>
       <span class="step-label">⚡ API Agent</span>
+    </div>
+  </div>
+  <div class="step-sep"></div>
+  <div class="step-item" onclick="navigateTo('schema-model')">
+    <div class="step-btn" id="step-schema-model">
+      <div class="step-num">8</div>
+      <span class="step-label">Schema Model</span>
     </div>
   </div>
 </nav>
@@ -2522,7 +2538,7 @@
       <!-- ── SCHEMA FAMILIES TAB ── -->
       <div id="iso-schemas-tab" class="sub-tab-content" style="display:none">
         <div class="card-grid">
-          <div class="research-card" onclick="openDetail('iso-pain')">
+          <div class="research-card" onclick="showSchemaPreview('pain')">
             <div class="card-top">
               <div class="card-category">Schema Family · Customer-to-Bank</div>
               <div class="card-status"><span class="status-badge badge-strong">pain.*</span></div>
@@ -2535,7 +2551,7 @@
             </div>
           </div>
 
-          <div class="research-card" onclick="openDetail('iso-pacs')">
+          <div class="research-card" onclick="showSchemaPreview('pacs')">
             <div class="card-top">
               <div class="card-category">Schema Family · FI-to-FI</div>
               <div class="card-status"><span class="status-badge badge-strong">pacs.*</span></div>
@@ -2548,7 +2564,7 @@
             </div>
           </div>
 
-          <div class="research-card" onclick="openDetail('iso-camt')">
+          <div class="research-card" onclick="showSchemaPreview('camt')">
             <div class="card-top">
               <div class="card-category">Schema Family · Reporting</div>
               <div class="card-status"><span class="status-badge badge-researched">Researched</span></div>
@@ -2561,6 +2577,177 @@
             </div>
           </div>
         </div>
+
+        <!-- ── SCHEMA DASHBOARD PREVIEW ── -->
+        <div id="schemaDashboardPreview" style="display:none;margin-top:28px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div>
+              <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--slate-light);">Schema Model Dashboard</span>
+              <span id="schemaPreviewLabel" style="margin-left:10px;font-size:12px;font-weight:600;color:var(--navy);"></span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <button onclick="document.getElementById('schemaDashboardPreview').style.display='none'"
+                      style="background:none;border:1px solid var(--mist);border-radius:var(--radius-sm);padding:5px 12px;font-size:12px;color:var(--text-muted);cursor:pointer;">✕ Close</button>
+              <a href="iso_schemas.html" target="_blank"
+                 style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;background:var(--navy);color:var(--gold);border-radius:var(--radius-sm);font-size:12px;font-weight:600;text-decoration:none;">
+                ↗ Open Full Schema Model
+              </a>
+            </div>
+          </div>
+
+          <!-- Clickable preview card that links to the full graph -->
+          <a href="iso_schemas.html" target="_blank" style="text-decoration:none;display:block;cursor:pointer;"
+             title="Click to open the full Schema Model dashboard">
+            <div style="border:2px solid var(--mist);border-radius:var(--radius-lg);overflow:hidden;background:var(--white);box-shadow:var(--shadow-panel);transition:box-shadow var(--transition),border-color var(--transition);"
+                 onmouseover="this.style.borderColor='var(--gold)';this.style.boxShadow='var(--shadow-float)'"
+                 onmouseout="this.style.borderColor='var(--mist)';this.style.boxShadow='var(--shadow-panel)'">
+
+              <!-- Mock dashboard header bar -->
+              <div style="background:var(--navy);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="width:28px;height:28px;border-radius:5px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--navy);">BK</div>
+                  <div>
+                    <div style="font-size:11px;font-weight:700;color:var(--white);">ISO 20022 Schema Explorer</div>
+                    <div style="font-size:9px;color:var(--slate-light);letter-spacing:0.08em;text-transform:uppercase;">Interactive Graph Dashboard</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <span style="background:rgba(200,168,75,0.15);border:1px solid rgba(200,168,75,0.3);border-radius:3px;padding:3px 8px;font-size:10px;color:var(--gold);font-weight:600;">pain.*</span>
+                  <span style="background:rgba(200,168,75,0.15);border:1px solid rgba(200,168,75,0.3);border-radius:3px;padding:3px 8px;font-size:10px;color:var(--gold);font-weight:600;">pacs.*</span>
+                  <span style="background:rgba(200,168,75,0.15);border:1px solid rgba(200,168,75,0.3);border-radius:3px;padding:3px 8px;font-size:10px;color:var(--gold);font-weight:600;">camt.*</span>
+                  <span style="background:rgba(200,168,75,0.15);border:1px solid rgba(200,168,75,0.3);border-radius:3px;padding:3px 8px;font-size:10px;color:var(--gold);font-weight:600;">admi.*</span>
+                </div>
+              </div>
+
+              <!-- Mock dashboard body: left nav + graph canvas -->
+              <div style="display:grid;grid-template-columns:200px 1fr;min-height:340px;">
+
+                <!-- Left nav sidebar mock -->
+                <div style="background:#0d2040;border-right:1px solid rgba(255,255,255,0.07);padding:14px 12px;display:flex;flex-direction:column;gap:6px;">
+                  <div style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(200,168,75,0.6);margin-bottom:4px;">Message Families</div>
+                  <div id="schemaNavPain"   style="border-radius:6px;padding:7px 10px;font-size:11px;font-weight:600;color:var(--white);cursor:pointer;transition:background 0.15s;background:rgba(200,168,75,0.18);">
+                    <span style="color:var(--gold);font-family:monospace;margin-right:6px;">pain</span>Customer-to-Bank
+                  </div>
+                  <div id="schemaNavPacs"   style="border-radius:6px;padding:7px 10px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);cursor:pointer;background:transparent;">
+                    <span style="color:#93C5FD;font-family:monospace;margin-right:6px;">pacs</span>FI-to-FI
+                  </div>
+                  <div id="schemaNavCamt"   style="border-radius:6px;padding:7px 10px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);cursor:pointer;background:transparent;">
+                    <span style="color:#6EE7B7;font-family:monospace;margin-right:6px;">camt</span>Reporting
+                  </div>
+                  <div style="border-radius:6px;padding:7px 10px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);">
+                    <span style="color:#FCA5A5;font-family:monospace;margin-right:6px;">admi</span>System
+                  </div>
+                  <div style="margin-top:auto;padding-top:12px;border-top:1px solid rgba(255,255,255,0.07);">
+                    <div style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(200,168,75,0.5);margin-bottom:6px;">Legend</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                      <span style="display:inline-flex;align-items:center;gap:3px;font-size:9px;color:rgba(255,255,255,0.5);"><span style="width:7px;height:7px;border-radius:50%;background:#C8A84B;display:inline-block;"></span>Release</span>
+                      <span style="display:inline-flex;align-items:center;gap:3px;font-size:9px;color:rgba(255,255,255,0.5);"><span style="width:7px;height:7px;border-radius:50%;background:#5B8FE8;display:inline-block;"></span>Message</span>
+                      <span style="display:inline-flex;align-items:center;gap:3px;font-size:9px;color:rgba(255,255,255,0.5);"><span style="width:7px;height:7px;border-radius:50%;background:#34D399;display:inline-block;"></span>Type</span>
+                      <span style="display:inline-flex;align-items:center;gap:3px;font-size:9px;color:rgba(255,255,255,0.5);"><span style="width:7px;height:7px;border-radius:50%;background:#F59E0B;display:inline-block;"></span>Element</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Graph canvas mock -->
+                <div style="background:#f0ede6;position:relative;overflow:hidden;" id="schemaGraphMock">
+                  <!-- Central node -->
+                  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+                    <div id="schemaGraphCenterLabel" style="background:var(--navy);color:var(--gold);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;font-family:monospace;box-shadow:0 4px 20px rgba(10,31,68,0.25);text-align:center;white-space:nowrap;">
+                      pain.*
+                    </div>
+                  </div>
+                  <!-- Orbiting nodes: pain ring -->
+                  <div id="schemaRingPain" style="">
+                    <div style="position:absolute;top:28%;left:62%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(200,168,75,0.18);border:1.5px solid rgba(200,168,75,0.5);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pain.001</div>
+                    </div>
+                    <div style="position:absolute;top:42%;left:72%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(200,168,75,0.18);border:1.5px solid rgba(200,168,75,0.5);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pain.002</div>
+                    </div>
+                    <div style="position:absolute;top:60%;left:68%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(200,168,75,0.18);border:1.5px solid rgba(200,168,75,0.5);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pain.007</div>
+                    </div>
+                    <div style="position:absolute;top:70%;left:50%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(200,168,75,0.18);border:1.5px solid rgba(200,168,75,0.5);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pain.008</div>
+                    </div>
+                    <div style="position:absolute;top:60%;left:30%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(200,168,75,0.18);border:1.5px solid rgba(200,168,75,0.5);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pain.013</div>
+                    </div>
+                    <div style="position:absolute;top:42%;left:27%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(200,168,75,0.18);border:1.5px solid rgba(200,168,75,0.5);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pain.014</div>
+                    </div>
+                    <div style="position:absolute;top:28%;left:38%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(200,168,75,0.18);border:1.5px solid rgba(200,168,75,0.5);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pain.009</div>
+                    </div>
+                  </div>
+                  <!-- Orbiting nodes: pacs ring (hidden initially) -->
+                  <div id="schemaRingPacs" style="display:none">
+                    <div style="position:absolute;top:28%;left:62%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(147,197,253,0.2);border:1.5px solid rgba(147,197,253,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pacs.008</div>
+                    </div>
+                    <div style="position:absolute;top:42%;left:72%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(147,197,253,0.2);border:1.5px solid rgba(147,197,253,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pacs.009</div>
+                    </div>
+                    <div style="position:absolute;top:60%;left:68%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(147,197,253,0.2);border:1.5px solid rgba(147,197,253,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pacs.004</div>
+                    </div>
+                    <div style="position:absolute;top:70%;left:50%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(147,197,253,0.2);border:1.5px solid rgba(147,197,253,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pacs.002</div>
+                    </div>
+                    <div style="position:absolute;top:60%;left:30%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(147,197,253,0.2);border:1.5px solid rgba(147,197,253,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pacs.003</div>
+                    </div>
+                    <div style="position:absolute;top:42%;left:27%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(147,197,253,0.2);border:1.5px solid rgba(147,197,253,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pacs.007</div>
+                    </div>
+                    <div style="position:absolute;top:28%;left:38%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(147,197,253,0.2);border:1.5px solid rgba(147,197,253,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">pacs.028</div>
+                    </div>
+                  </div>
+                  <!-- Orbiting nodes: camt ring (hidden initially) -->
+                  <div id="schemaRingCamt" style="display:none">
+                    <div style="position:absolute;top:28%;left:62%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(110,231,183,0.2);border:1.5px solid rgba(110,231,183,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">camt.052</div>
+                    </div>
+                    <div style="position:absolute;top:42%;left:72%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(110,231,183,0.2);border:1.5px solid rgba(110,231,183,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">camt.053</div>
+                    </div>
+                    <div style="position:absolute;top:60%;left:68%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(110,231,183,0.2);border:1.5px solid rgba(110,231,183,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">camt.054</div>
+                    </div>
+                    <div style="position:absolute;top:70%;left:50%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(110,231,183,0.2);border:1.5px solid rgba(110,231,183,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">camt.056</div>
+                    </div>
+                    <div style="position:absolute;top:60%;left:30%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(110,231,183,0.2);border:1.5px solid rgba(110,231,183,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">camt.029</div>
+                    </div>
+                    <div style="position:absolute;top:42%;left:27%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(110,231,183,0.2);border:1.5px solid rgba(110,231,183,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">camt.026</div>
+                    </div>
+                    <div style="position:absolute;top:28%;left:38%;transform:translate(-50%,-50%);">
+                      <div style="background:rgba(110,231,183,0.2);border:1.5px solid rgba(110,231,183,0.6);border-radius:7px;padding:5px 11px;font-size:10px;font-weight:600;color:var(--navy);font-family:monospace;white-space:nowrap;">camt.087</div>
+                    </div>
+                  </div>
+                  <!-- SVG connector lines from center outward -->
+                  <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet">
+                    <line x1="300" y1="170" x2="372" y2="95"  stroke="rgba(10,31,68,0.12)" stroke-width="1.5"/>
+                    <line x1="300" y1="170" x2="432" y2="143" stroke="rgba(10,31,68,0.12)" stroke-width="1.5"/>
+                    <line x1="300" y1="170" x2="408" y2="204" stroke="rgba(10,31,68,0.12)" stroke-width="1.5"/>
+                    <line x1="300" y1="170" x2="300" y2="238" stroke="rgba(10,31,68,0.12)" stroke-width="1.5"/>
+                    <line x1="300" y1="170" x2="180" y2="204" stroke="rgba(10,31,68,0.12)" stroke-width="1.5"/>
+                    <line x1="300" y1="170" x2="162" y2="143" stroke="rgba(10,31,68,0.12)" stroke-width="1.5"/>
+                    <line x1="300" y1="170" x2="228" y2="95"  stroke="rgba(10,31,68,0.12)" stroke-width="1.5"/>
+                  </svg>
+                  <!-- Hover hint -->
+                  <div style="position:absolute;bottom:12px;right:16px;background:var(--navy);color:var(--gold);border-radius:var(--radius-sm);padding:5px 10px;font-size:10px;font-weight:600;opacity:0.85;">
+                    ↗ Click to explore full interactive graph
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+
       </div>
 
       <!-- ── ISO MESSAGING CHART TAB ── -->
@@ -3184,18 +3371,32 @@
           </div>
         </div>
 
-        <!-- Quick Action Buttons -->
-        <div class="agent-quick-actions">
-          <button class="agent-quick-btn" onclick="agentQuickAction('Generate a valid ACH payment request')">⚡ Generate ACH</button>
-          <button class="agent-quick-btn" onclick="agentQuickAction('Generate a valid IAT payment request')">⚡ Generate IAT</button>
-          <button class="agent-quick-btn" onclick="agentQuickAction('Generate a valid WIRE payment request')">⚡ Generate WIRE</button>
-          <button class="agent-quick-btn" onclick="agentQuickAction('Generate a valid RTP payment request')">⚡ Generate RTP</button>
-          <button class="agent-quick-btn" onclick="agentQuickAction('Generate a valid SWIFT payment request')">⚡ Generate SWIFT</button>
-          <button class="agent-quick-btn agent-quick-btn--secondary" onclick="agentQuickAction('Generate a Python code sample for an ACH payment')">Python</button>
-          <button class="agent-quick-btn agent-quick-btn--secondary" onclick="agentQuickAction('Generate a Java code sample for an ACH payment')">Java</button>
-          <button class="agent-quick-btn agent-quick-btn--secondary" onclick="agentQuickAction('Generate a Node.js code sample for an ACH payment')">Node.js</button>
-          <button class="agent-quick-btn agent-quick-btn--secondary" onclick="agentQuickAction('Generate a C# code sample for an ACH payment')">C#</button>
-          <button class="agent-quick-btn agent-quick-btn--secondary" onclick="agentQuickAction('Generate a cURL code sample for an ACH payment')">cURL</button>
+        <!-- Capability Chips -->
+        <div class="agent-caps">
+          <button class="agent-cap-chip" onclick="agentQuickAction('I need to generate a payment request. Can you help me choose the right payment rail?')">
+            <span class="agent-cap-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            </span>
+            Generate a payment request
+          </button>
+          <button class="agent-cap-chip" onclick="agentQuickAction('I have a JSON payment payload I need to validate. What format should I paste it in?')">
+            <span class="agent-cap-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            Validate a JSON payload
+          </button>
+          <button class="agent-cap-chip" onclick="agentQuickAction('Can you explain the field rules and validation requirements for payment APIs? Which rail or field would you like to start with?')">
+            <span class="agent-cap-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </span>
+            Explain field rules
+          </button>
+          <button class="agent-cap-chip" onclick="agentQuickAction('Can you generate a code sample for a payment API call? Which rail and language would you like?')">
+            <span class="agent-cap-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </span>
+            Get a code sample
+          </button>
         </div>
 
         <!-- Chat + Code Panel Layout -->
@@ -3246,10 +3447,30 @@
         </div>
       </div>
 
-    </main>
-  </div>
+          <!-- ═══════════════════════════════════════════════════════════════════
+               SECTION 8: SCHEMA MODEL
+          ════════════════════════════════════════════════════════════════════ -->
+          <div class="section-view" id="view-schema-model" style="padding:0;display:none;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px 14px;background:var(--white);border-bottom:1px solid var(--mist);">
+              <div>
+                <div style="font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--slate-light);margin-bottom:4px;">Section 8 · Schema Model</div>
+                <div style="font-size:20px;font-weight:700;color:var(--navy);font-family:var(--font-display);">ISO 20022 Schema Explorer</div>
+              </div>
+              <a href="iso_schemas.html" target="_blank"
+                 style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--navy);color:var(--gold);border-radius:var(--radius-sm);font-size:12px;font-weight:600;text-decoration:none;letter-spacing:0.04em;">
+                ↗ Open Full Page
+              </a>
+            </div>
+            <iframe src="iso_schemas.html"
+                    style="width:calc(100% - 32px);height:calc(100vh - 210px);border:2px solid var(--mist);border-radius:var(--radius-sm);display:block;margin:8px 16px 24px 16px;"
+                    title="ISO 20022 Schema Model Dashboard">
+            </iframe>
+          </div>
 
-<!-- ── DETAIL OVERLAY + PANEL ─────────────────────────────────────────────── -->
+        </main>
+      </div>
+
+    <!-- ── DETAIL OVERLAY + PANEL ── -->
 <div class="detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
 <div class="detail-panel" id="detailPanel">
   <div class="panel-header">
@@ -4818,11 +5039,55 @@ function renderIsoTabContent(tabId) {
 // ── NAVIGATION ───────────────────────────────────────────────────────────────
 let currentSection = 'overview';
 
+// ── SCHEMA PREVIEW ───────────────────────────────────────────────────────────
+const schemaPreviewMeta = {
+  pain: { label: 'pain.* — Customer-to-Bank',  centerText: 'pain.*',  ring: 'schemaRingPain',  nav: 'schemaNavPain',  color: 'rgba(200,168,75,0.18)' },
+  pacs: { label: 'pacs.* — FI-to-FI',          centerText: 'pacs.*',  ring: 'schemaRingPacs',  nav: 'schemaNavPacs',  color: 'rgba(147,197,253,0.2)' },
+  camt: { label: 'camt.* — Reporting',          centerText: 'camt.*',  ring: 'schemaRingCamt',  nav: 'schemaNavCamt',  color: 'rgba(110,231,183,0.2)' }
+};
+
+function showSchemaPreview(family) {
+  const meta = schemaPreviewMeta[family];
+  if (!meta) return;
+
+  // Show the preview container
+  const preview = document.getElementById('schemaDashboardPreview');
+  preview.style.display = '';
+
+  // Update label
+  document.getElementById('schemaPreviewLabel').textContent = meta.label;
+
+  // Update center node
+  document.getElementById('schemaGraphCenterLabel').textContent = meta.centerText;
+
+  // Show correct ring, hide others
+  ['schemaRingPain','schemaRingPacs','schemaRingCamt'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = (id === meta.ring) ? '' : 'none';
+  });
+
+  // Highlight correct nav item
+  ['schemaNavPain','schemaNavPacs','schemaNavCamt'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.background = (id === meta.nav) ? meta.color : 'transparent';
+  });
+
+  // Smooth scroll to preview
+  setTimeout(() => preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+
 function navigateTo(section) {
   // Update views
-  document.querySelectorAll('.section-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.section-view').forEach(v => {
+    v.classList.remove('active');
+    if (v.id === 'view-schema-model') v.style.display = 'none';
+  });
   const target = document.getElementById('view-' + section);
-  if (target) target.classList.add('active');
+  if (target) {
+    target.classList.add('active');
+    if (target.id === 'view-schema-model') target.style.display = '';
+  }
 
   // Update stepper
   document.querySelectorAll('.step-btn').forEach(b => {
